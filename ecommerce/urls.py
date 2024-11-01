@@ -1,40 +1,27 @@
+# Import necessary Django modules and functions
+from django.conf import settings  # Access project settings like MEDIA_URL and MEDIA_ROOT
+from django.conf.urls.static import static  # Serve static and media files during development
+from django.contrib import admin  # Django admin site
+from django.urls import path, include  # Functions to define URL patterns
 
-from django.contrib import admin
-from django.urls import path, include
-
-from django.conf import settings
-
-from django.conf.urls.static import static
-
+# Define the URL patterns for the project
 urlpatterns = [
-
-    # Admin url
-    
+    # Admin site URL
     path('admin/', admin.site.urls),
 
-    
-    # Store app
-
+    # Store application URLs
     path('', include('store.urls')),
 
-
-    # Cart app
-
+    # Cart application URLs
     path('cart/', include('cart.urls')),
 
-
-    # Account app
-
+    # Account application URLs
     path('account/', include('account.urls')),
 
-
-    # Payment app
-
+    # Payment application URLs
     path('payment/', include('payment.urls')),
-
-
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
+# Serve media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

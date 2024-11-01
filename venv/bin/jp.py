@@ -1,4 +1,4 @@
-#!/Users/mungb.pro/Documents/udemy_courses/dev/ecommerce/venv/bin/python3
+#!/Users/mungb.pro/-cs5500-group2-ecommerce-platform/venv/bin/python3.10
 
 import sys
 import json

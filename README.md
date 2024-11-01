@@ -42,14 +42,40 @@ If you haven't already cloned the repository, run:
 git clone https://github.com/Rolin128/-cs5500-group2-ecommerce-platform
 cd -cs5500-group2-ecommerce-platform
 ```
+```
 
 ### 2. Set Up a Virtual Environment
-To keep dependencies isolated, create and activate a virtual environment:
 
-```bash
-python3 -m venv env
-source env/bin/activate  # On macOS/Linux
-env\Scripts\activate     # On Windows
+To keep dependencies isolated, follow these steps to create and activate a virtual environment:
+
+1. **Deactivate any existing virtual environment:**
+
+   ```bash
+   deactivate
+   rm -rf venv
+   ```
+
+2. **Create a new virtual environment using Python 3.10:**
+
+   ```bash
+   python3.10 -m venv venv
+   ```
+
+3. **Activate the virtual environment:**
+
+   - **For macOS/Linux:**
+
+     ```bash
+     source venv/bin/activate
+     ```
+
+   - **For Windows:**
+
+     ```bash
+     venv\Scripts\activate
+     ```
+
+> **Note**: Ensure you use Python 3.10 specifically, as using a different version may lead to dependency issues. If you don't have Python 3.10 installed, refer to the documentation on how to download and install it.
 ```
 
 ### 3. Install Project Dependencies
