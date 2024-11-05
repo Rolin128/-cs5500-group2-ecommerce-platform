@@ -41,4 +41,48 @@ If you haven't already cloned the repository, run:
 ```bash
 git clone https://github.com/Rolin128/-cs5500-group2-ecommerce-platform
 cd -cs5500-group2-ecommerce-platform
+```
+
+### 2. Set Up a Virtual Environment
+To keep dependencies isolated, create and activate a virtual environment:
+
+```bash
+python3 -m venv env
+source env/bin/activate  # On macOS/Linux
+env\Scripts\activate     # On Windows
+```
+
+### 3. Install Project Dependencies
+Install the required packages from requirements.txt:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Apply Migrations
+Set up the database by applying migrations:
+
+```bash
+python manage.py migrate
+```
+
+### 5. Create a Superuser
+To access the Django admin panel, create a superuser account:
+
+```bash
+python manage.py createsuperuser
+```
+
+### 6. Start the Development Server
+Run the Django development server: 
+This will start the server at http://127.0.0.1:8000/. Open this URL in your browser to view your project.
+
+```bash
+python manage.py runserver
+```
+### 7. Access Admin Panel Visit
+http://127.0.0.1:8000/admin and log in with the superuser credentials to access Django’s admin interface.
+
+
+
 
