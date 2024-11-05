@@ -160,3 +160,45 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Additional system files (optional)
+*.bak
+*.swp
+*.tmp
+*.temp
+
+# Mac OS generated files (already partially covered)
+.AppleDouble
+.LSOverride
+
+# Windows generated files
+Desktop.ini
+Thumbs.db
+ehthumbs.db
+
+# Additional Python virtual environment folders
+.vscode/
+.venv/
+
+# Log files
+*.log
+
+# Coverage reports (for other tools)
+*.cover
+
+# Django specific files (in case you missed anything)
+**/migrations/**
+
+# Node modules (if using JavaScript for front-end)
+node_modules/
+
+# Temporary files created by editors
+*.swo
+*.swn
+*.kate-swp
+
+# Optional lock files (for package managers other than pip)
+Pipfile.lock
+poetry.lock
+pdm.lock
+yarn.lock
