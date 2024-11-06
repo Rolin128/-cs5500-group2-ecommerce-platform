@@ -42,7 +42,6 @@ If you haven't already cloned the repository, run:
 git clone https://github.com/Rolin128/-cs5500-group2-ecommerce-platform
 cd -cs5500-group2-ecommerce-platform
 ```
-```
 
 ### 2. Set Up a Virtual Environment
 
@@ -76,7 +75,6 @@ To keep dependencies isolated, follow these steps to create and activate a virtu
      ```
 
 > **Note**: Ensure you use Python 3.10 specifically, as using a different version may lead to dependency issues. If you don't have Python 3.10 installed, refer to the documentation on how to download and install it.
-```
 
 ### 3. Install Project Dependencies
 Install the required packages from requirements.txt:
