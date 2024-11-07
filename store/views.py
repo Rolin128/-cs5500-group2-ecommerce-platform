@@ -15,6 +15,12 @@ def store(request):
 
 
 
+def categories(request):
+
+    all_categories = Category.objects.all()
+
+    return {'all_categories': all_categories}
+
 
 
 def list_category(request, category_slug=None):
@@ -35,7 +41,6 @@ def product_info(request, product_slug):
     context = {'product': product}
 
     return render(request, 'store/product-info.html', context)
-
 
 
 
