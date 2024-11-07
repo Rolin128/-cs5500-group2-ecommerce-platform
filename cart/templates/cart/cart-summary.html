@@ -119,5 +119,121 @@
     {% endfor %}
 
 
+    <!-- LP -->
+
+
+      <div class="col-12 text-end">
+ 
+        <div class="h6 fw-bold"> Total price: $ <div id="total" class="d-inline-flex"> {{cart.get_total}} </div></div>
+
+        <br>
+
+        <a href="{% url 'checkout' %}" class="btn btn-primary my-2"> <i class="fa fa-chevron-circle-right" aria-hidden="true"></i> &nbsp; Proceed to checkout </a>
+        
+      </div>
+
+    </div>
+  
+    <br>
+
+    <br>
+
+ </main>
+
+ <script>
+
+  // Delete button
+
+    $(document).on('click', '.delete-button', function(e){
+
+      e.preventDefault();
+
+      $.ajax({
+
+          type: 'POST',
+          url: '{% url "cart-delete" %}',
+          data: {
+
+              product_id: $(this).data('index'),
+              csrfmiddlewaretoken: "{{csrf_token}}",
+              action: 'post'
+
+          },
+
+          success: function(json){
+
+              //console.log(json)
+
+              location.reload();
+              
+
+              document.getElementById("cart-qty").textContent = json.qty
+
+              document.getElementById("total").textContent = json.total
+
+
+          },
+
+          error: function(xhr, errmsg, err){
+
+
+          }
+
+      });
+
+
+  })
+
+
+  // Update button
+
+  $(document).on('click', '.update-button', function(e){
+
+    e.preventDefault();
+
+    var theproductid = $(this).data('index');
+
+    $.ajax({
+
+        type: 'POST',
+        url: '{% url "cart-update" %}',
+        data: {
+
+            product_id: $(this).data('index'),
+            product_quantity: $('#select' + theproductid + ' option:selected').text(),
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+
+        },
+
+        success: function(json){
+
+            //console.log(json)
+
+            location.reload();
+            
+
+            document.getElementById("cart-qty").textContent = json.qty
+
+            document.getElementById("total").textContent = json.total
+
+
+        },
+
+        error: function(xhr, errmsg, err){
+
+
+        }
+
+    });
+
+
+})
+
+
+
+ </script>
+
+
 {% endblock %}
 
