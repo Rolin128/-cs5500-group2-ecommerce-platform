@@ -16,4 +16,3 @@ class ProductAdmin(admin.ModelAdmin):
 
     prepopulated_fields = {'slug': ('title',)}
 
-

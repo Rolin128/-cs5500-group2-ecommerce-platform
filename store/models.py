@@ -63,4 +63,3 @@ class Product(models.Model):
         return reverse('product-info', args=[self.slug])
 
 
-

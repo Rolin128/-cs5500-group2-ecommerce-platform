@@ -47,4 +47,3 @@ def product_info(request, product_slug):
 
 
 
-
