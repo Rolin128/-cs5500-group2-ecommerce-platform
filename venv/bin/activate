@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/mungb.pro/-cs5500-group2-ecommerce-platform/venv"
+VIRTUAL_ENV="/Users/cc/-cs5500-group2-ecommerce-platform/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
