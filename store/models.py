@@ -10,7 +10,6 @@ class Category(models.Model):
 
     slug = models.SlugField(max_length=250, unique=True)
 
-
     class Meta:
 
         verbose_name_plural = 'categories'
