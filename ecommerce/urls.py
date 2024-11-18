@@ -20,6 +20,9 @@ urlpatterns = [
 
     # Payment application URLs
     path('payment/', include('payment.urls')),
+
+    # Chatbot application URLs
+    path('chatbot/', include('chatbot.urls')), 
 ]
 
 # Serve media files during development
