@@ -224,6 +224,29 @@ DATABASES = {
 }
 '''
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',  # 设置最低日志级别为 INFO
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],  # 日志输出到控制台
+            'level': 'INFO',         # 设置最低日志级别为 INFO
+            'propagate': True,
+        },
+        '': {  # Root logger，捕获你代码中的日志
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
+
+
 
 
 
