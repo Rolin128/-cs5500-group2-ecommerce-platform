@@ -83,28 +83,21 @@ Install the required packages from requirements.txt:
 pip install -r requirements.txt
 ```
 
-### 4. Apply Migrations
-Set up the database by applying migrations:
-
-```bash
-python manage.py migrate
-```
-
-### 5. Create a Superuser
+### 4. Create a Superuser
 To access the Django admin panel, create a superuser account:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-### 6. Start the Development Server
+### 5. Start the Development Server
 Run the Django development server: 
 This will start the server at http://127.0.0.1:8000/. Open this URL in your browser to view your project.
 
 ```bash
 python manage.py runserver
 ```
-### 7. Access Admin Panel Visit
+### 6. Access Admin Panel Visit
 http://127.0.0.1:8000/admin and log in with the superuser credentials to access Django’s admin interface.
 
 
