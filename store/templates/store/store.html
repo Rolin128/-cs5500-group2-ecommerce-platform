@@ -79,29 +79,6 @@
         </div>
     {% endif %}
 
-    <!-- Categories Section -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h3>Categories</h3>
-            <div class="row">
-                {% for category in categories %}
-                    <div class="col-md-3 mb-4">
-                        <a href="{{ category.get_absolute_url }}" class="text-decoration-none">
-                            <div class="card category-card h-100">
-                                {% if category.image %}
-                                    <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
-                                {% endif %}
-                                <div class="card-body text-center">
-                                    <h5 class="card-title text-dark">{{ category.name }}</h5>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
     <!-- Featured Products Section -->
     <div class="row">
         <div class="col-12">

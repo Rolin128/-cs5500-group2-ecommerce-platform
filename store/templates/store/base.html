@@ -37,6 +37,16 @@
             <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'store' %}">Home</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categories
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                    {% for category in categories %}
+                        <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
         </ul>
 
         <div class="d-flex align-items-center">
