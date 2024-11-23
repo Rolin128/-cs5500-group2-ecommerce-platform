@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
 
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
@@ -106,76 +107,267 @@
     {% endblock %}
 
     <!-- Chatbot Container -->
-    <div id="chatbot-container" style="position: fixed; bottom: 20px; right: 20px; width: 350px; display: none; background: #fff; border: 1px solid #ddd; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
-    <div style="background: #007bff; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-weight: bold;">
-        <span>Chat with Edenthought Assistant</span>
-        <button style="background: none; border: none; color: white; font-size: 16px; cursor: pointer;" onclick="toggleChatbot()">X</button>
+    <div id="chatbot-container" class="chatbot-container">
+        <div id="chatbot-header" class="chatbot-header">
+            <span>Chat With Simplista AI-Powered Assistant</span>
+            <div class="controls">
+                <button onclick="toggleExpand()" title="Expand/Collapse">⛶</button>
+                <button onclick="toggleChatbot()" title="Close">✕</button>
+            </div>
+        </div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="message bot-message">
+                <div class="message-avatar">🤖</div>
+                <div class="message-username">AI Assistant</div>
+                <div class="message-content">Hi! How can I help you today?</div>
+            </div>
+        </div>
+        <div class="chatbot-input-container">
+            <input id="chatbot-input" class="chatbot-input" type="text" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()" class="chatbot-send">Send</button>
+        </div>
+        <div class="resize-handle" id="resize-handle"></div>
     </div>
-    <div id="chatbot-messages" style="height: 300px; overflow-y: auto; padding: 10px; background: #f9f9f9;">
-        <div>Hi! How can I help you today?</div>
-    </div>
-    <input id="chatbot-input" type="text" placeholder="Ask me anything..." style="width: 100%; padding: 10px; border: none; border-top: 1px solid #ddd;">
-    <button onclick="sendMessage()" style="width: 100%; background: #007bff; color: white; border: none; padding: 10px;">Send</button>
-</div>
 
     <!-- Chatbot Toggle Button -->
-    <button onclick="toggleChatbot()" style="position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; text-align: center; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">💬</button>
-</body>
+    <button onclick="toggleChatbot()" class="chatbot-toggle">💬</button>
 
-<script>
+    <script>
+    // Get the username from localStorage or set a default
+    let username = localStorage.getItem('chatbot_username');
+    if (!username) {
+        username = 'User';  // Default username
+    }
+
+    // Resize functionality
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight;
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const resizeHandle = document.getElementById('resize-handle');
+    const header = document.getElementById('chatbot-header');
+
+    // Resize handle functionality
+    resizeHandle.addEventListener('mousedown', initResize);
+
+    function initResize(e) {
+        isResizing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = parseInt(getComputedStyle(chatbotContainer).width, 10);
+        startHeight = parseInt(getComputedStyle(chatbotContainer).height, 10);
+        
+        document.addEventListener('mousemove', resize);
+        document.addEventListener('mouseup', stopResize);
+    }
+
+    function resize(e) {
+        if (!isResizing) return;
+
+        const width = startWidth + (e.clientX - startX);
+        const height = startHeight + (e.clientY - startY);
+
+        // Apply size constraints
+        const maxWidth = window.innerWidth * 0.5;
+        const maxHeight = window.innerHeight * 0.8;
+        const minWidth = 350;
+        const minHeight = 500;
+
+        chatbotContainer.style.width = Math.min(Math.max(width, minWidth), maxWidth) + 'px';
+        chatbotContainer.style.height = Math.min(Math.max(height, minHeight), maxHeight) + 'px';
+    }
+
+    function stopResize() {
+        isResizing = false;
+        document.removeEventListener('mousemove', resize);
+        document.removeEventListener('mouseup', stopResize);
+    }
+
+    // Drag functionality
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    header.addEventListener('mousedown', dragStart);
+
+    function dragStart(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+
+        if (e.target === header) {
+            isDragging = true;
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            const maxX = window.innerWidth - chatbotContainer.offsetWidth - 20;
+            const maxY = window.innerHeight - chatbotContainer.offsetHeight - 20;
+
+            // Constrain to window bounds
+            currentX = Math.min(Math.max(20, currentX), maxX);
+            currentY = Math.min(Math.max(20, currentY), maxY);
+
+            chatbotContainer.style.right = (window.innerWidth - currentX - chatbotContainer.offsetWidth) + 'px';
+            chatbotContainer.style.bottom = (window.innerHeight - currentY - chatbotContainer.offsetHeight) + 'px';
+        }
+    }
+
+    function dragEnd() {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', dragEnd);
+    }
+
+    function toggleExpand() {
+        chatbotContainer.classList.toggle('expanded');
+    }
+
     function toggleChatbot() {
         const chatbotContainer = document.getElementById("chatbot-container");
         chatbotContainer.style.display = chatbotContainer.style.display === "none" ? "block" : "none";
     }
 
-    function sendMessage() {
-        const input = document.getElementById("chatbot-input").value;
-        if (input.trim() === "") return;
-
-        const messages = document.getElementById("chatbot-messages");
-        const userMessage = `<div style="text-align: right; margin: 10px 0;">${input}</div>`;
-        messages.innerHTML += userMessage;
-        messages.scrollTop = messages.scrollHeight;
-
-        // Send user input to the backend API
-        fetch("/chatbot/recommendations/", {  // 确保路径与后端匹配
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: input })
-        })
-            .then(response => response.json())
-            .then(data => {
-                const recommendations = data.response;
-
-                // Handle no matching products
-                if (recommendations.length === 0 || recommendations[0].title === "No matching products found.") {
-                    messages.innerHTML += `<div style="text-align: left; margin: 10px 0;">Sorry, no matching products found.</div>`;
-                } else {
-                    // Display product recommendations
-                    recommendations.forEach(product => {
-                        const botMessage = `
-                            <div style="text-align: left; margin: 10px 0; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
-                                <strong>${product.title}</strong><br>
-                                Brand: ${product.brand}<br>
-                                Price: $${product.price}<br>
-                                <img src="${product.image}" alt="${product.title}" style="width: 100px; height: auto; margin-top: 5px;">
-                            </div>
-                        `;
-                        messages.innerHTML += botMessage;
-                    });
-                }
-
-                messages.scrollTop = messages.scrollHeight;
-            })
-            .catch(error => {
-                // Handle errors
-                messages.innerHTML += `<div style="text-align: left; margin: 10px 0; color: red;">Error: Unable to fetch recommendations. Please try again later.</div>`;
-                console.error("Error fetching recommendations:", error);
-            });
-
-        document.getElementById("chatbot-input").value = "";
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
     }
 
-</script>
+    function appendMessage(content, isUser = false) {
+        const messages = document.getElementById("chatbot-messages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = isUser ? '👤' : '🤖';
+        messageDiv.appendChild(avatar);
+
+        const usernameDiv = document.createElement("div");
+        usernameDiv.className = "message-username";
+        usernameDiv.textContent = isUser ? username : 'AI Assistant';
+        messageDiv.appendChild(usernameDiv);
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "message-content";
+        contentDiv.textContent = content;
+        messageDiv.appendChild(contentDiv);
+
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function appendProductCard(product) {
+        const messages = document.getElementById("chatbot-messages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message bot-message";
+        
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = '🤖';
+        messageDiv.appendChild(avatar);
+
+        const usernameDiv = document.createElement("div");
+        usernameDiv.className = "message-username";
+        usernameDiv.textContent = 'AI Assistant';
+        messageDiv.appendChild(usernameDiv);
+
+        const cardDiv = document.createElement("div");
+        cardDiv.className = "message-content product-card";
+        
+        // Create a clickable container
+        const cardLink = document.createElement("a");
+        cardLink.href = product.url;
+        cardLink.className = "product-card-link";
+        cardLink.innerHTML = `
+            <div class="product-card-content">
+                <strong>${product.title}</strong><br>
+                Brand: ${product.brand}<br>
+                Price: $${product.price}<br>
+                <img src="${product.image}" alt="${product.title}">
+            </div>
+        `;
+        
+        cardDiv.appendChild(cardLink);
+        messageDiv.appendChild(cardDiv);
+        
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function appendErrorMessage(error) {
+        const messages = document.getElementById("chatbot-messages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message bot-message";
+        
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = '🤖';
+        messageDiv.appendChild(avatar);
+
+        const usernameDiv = document.createElement("div");
+        usernameDiv.className = "message-username";
+        usernameDiv.textContent = 'AI Assistant';
+        messageDiv.appendChild(usernameDiv);
+
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "message-content error-message";
+        errorDiv.textContent = error;
+        messageDiv.appendChild(errorDiv);
+
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById("chatbot-input");
+        const message = input.value.trim();
+        
+        if (message === "") return;
+        
+        appendMessage(message, true);
+        input.value = "";
+
+        fetch("/chatbot/recommendations/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const recommendations = data.response;
+
+            if (recommendations.length === 0 || recommendations[0].title === "No matching products found.") {
+                appendMessage("Sorry, no matching products found.");
+            } else {
+                recommendations.forEach(product => {
+                    appendProductCard(product);
+                });
+            }
+        })
+        .catch(error => {
+            appendErrorMessage("Error: Unable to fetch recommendations. Please try again later.");
+            console.error("Error fetching recommendations:", error);
+        });
+    }
+    </script>
+</body>
 
 </html>
