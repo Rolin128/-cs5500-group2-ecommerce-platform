@@ -83,9 +83,8 @@ urlpatterns = [
 
     path('track-orders', views.track_orders, name='track-orders'),
 
+    path('mock-register/', views.mock_register, name='mock-register'),
+
 ]
-
-
-
 
 

@@ -1,103 +1,57 @@
-
-{% include "store/base.html" %}
-
+{% extends "store/base.html" %}
 {% load static %}
-
 {% load crispy_forms_tags %}
 
-
 {% block content %}
-
-    <style>
-
-
-        body{
-
-
-            background-color: gray;
-
-        }
-
-
-
-    </style>
-
-
-
-
-    <body>
-
-        <br>
-
-        <div class="container bg-white shadow-md p-5 form-layout">
-
-            <h3> Create your account </h3>
-
-            <h5> Purchase your favourite items today! </h5>
-
-            <hr>
-            <br>
-
-            <form method="POST" autocomplete="off">
-
-                {% csrf_token %}
-
-                {{form.username|as_crispy_field}}
-
-                <br> <br>
-
-
-                {{form.email|as_crispy_field}}
-
-                <br> <br>
-
-
-                {{form.password1|as_crispy_field}}
-
-                <br> <br>
-
-
-                {{form.password2|as_crispy_field}}
-
-
-                <br> <br>
-                
-                <button type="submit" class="btn btn-primary navbar-btn text-white w-100 p-2"> &nbsp; Create account </button>
-
-                <br> <br>
-
-                <div class="text-center">
-
-                    <a href="{% url 'my-login' %}"> Already have an account? </a>
-
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h3 class="mb-4">Create Your Account</h3>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" autocomplete="off">
+                        {% csrf_token %}
+                        {% if next %}
+                            <input type="hidden" name="next" value="{{ next }}">
+                        {% endif %}
+                        
+                        {{ form|crispy }}
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Create Account</button>
+                        </div>
+                    </form>
+                    
+                    {% if debug %}
+                    <div class="text-center mt-4">
+                        <p class="text-muted">For Local Development Only:</p>
+                        <a href="{% url 'mock-register' %}{% if next %}?next={{ next }}{% endif %}" 
+                           class="btn btn-outline-secondary w-100">
+                            Local Mock Register
+                        </a>
+                        <small class="text-muted d-block mt-2">
+                            This button creates a temporary test account for local development.
+                        </small>
+                    </div>
+                    {% endif %}
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? <a href="{% url 'my-login' %}{% if next %}?next={{ next }}{% endif %}">Login</a></p>
+                    </div>
                 </div>
-
-
-            </form>
-
-
-
-
-
+            </div>
         </div>
-
-
-
-    </body>
-
-    <br> <br>
-
-
+    </div>
+</div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-

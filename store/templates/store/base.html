@@ -33,60 +33,46 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{% url 'store' %}"> All </a></li>
-                    {% for category in all_categories %}
-                    <li><a class="dropdown-item" href="{{category.get_absolute_url}}"> {{ category.name | capfirst }} </a></li>
-                    {% endfor %}
-                </ul>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'store' %}">Home</a>
             </li>
         </ul>
-    </div>
 
-    <div class="collapse navbar-collapse text-center" id="navbarNavDropdown">
-        <ul class="navbar-nav ms-auto">
+        <div class="d-flex align-items-center">
             {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'dashboard' %}"> <i class="fa fa-home" aria-hidden="true"></i> &nbsp; Dashboard </a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'register' %}"> Register </a>
-            </li>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'user-logout' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i> &nbsp; Logout </a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'my-login' %}"> Login </a>
-            </li>
-            {% endif %}
-
-            &nbsp; &nbsp; &nbsp;
-
-            <li class="nav-item">
-                <a type="button" role="button" href="{% url 'cart-summary' %}" class="btn btn-outline-secondary">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"> </i>
-                    &nbsp;
-                    <div id="cart-qty" class="d-inline-flex">
+                <div class="dropdown me-3">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Welcome, {{ user.username }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{% url 'profile-management' %}">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'user-logout' %}">Logout</a></li>
+                    </ul>
+                </div>
+                <a href="{% url 'cart-summary' %}" class="btn btn-outline-secondary">
+                    Cart
+                    <span class="badge bg-secondary" id="cart-qty">
                         {% with qty_amount=cart|length %}
-                        {% if qty_amount > 0 %}
-                        {{ qty_amount }}
-                        {% else %}
-                        0
-                        {% endif %}
+                            {% if qty_amount > 0 %}
+                                {{ qty_amount }}
+                            {% else %}
+                                0
+                            {% endif %}
                         {% endwith %}
-                    </div>
+                    </span>
                 </a>
-            </li>
-            &nbsp; &nbsp; &nbsp;
-        </ul>
+            {% else %}
+                <a href="{% url 'register' %}" class="btn btn-outline-secondary me-2">Create Account</a>
+                <a href="{% url 'my-login' %}" class="btn btn-primary me-3">Login</a>
+                <a href="{% url 'cart-summary' %}" class="btn btn-outline-secondary">
+                    Cart
+                    <span class="badge bg-secondary">0</span>
+                </a>
+            {% endif %}
+        </div>
     </div>
 </nav>
 

@@ -18,7 +18,9 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
+from django.conf import settings
+import uuid
 
 
 from django.contrib.auth.decorators import login_required
@@ -30,48 +32,32 @@ from django.contrib import messages
 
 
 def register(request):
-
-    form = CreateUserForm()
+    if request.user.is_authenticated:
+        return redirect('store')
 
     if request.method == 'POST':
-
         form = CreateUserForm(request.POST)
-
-        if form.is_valid(): 
-
+        if form.is_valid():
             user = form.save()
-
-            user.is_active = False
-
+            user.email = user.email.lower()
             user.save()
 
-            # Email verification setup (template)
+            # Log the user in
+            auth.login(request, user)
 
-            current_site = get_current_site(request)
+            # Get the next URL from the form data
+            next_url = request.POST.get('next', 'store')
+            return redirect(next_url)
+    else:
+        form = CreateUserForm()
 
-            subject = 'Account verification email'
-
-            message = render_to_string('account/registration/email-verification.html', {
-            
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': user_tokenizer_generate.make_token(user),
-            
-            })
-
-            user.email_user(subject=subject, message=message)
-
-
-            return redirect('email-verification-sent')
-
-
-
-    context = {'form':form}
-
+    context = {
+        'form': form,
+        'debug': settings.DEBUG,
+        'next': request.GET.get('next', '')
+    }
 
     return render(request, 'account/registration/register.html', context=context)
-
 
 
 
@@ -97,53 +83,44 @@ def email_verification(request, uidb64, token):
     # Failed 
 
     else:
-
         return redirect('email-verification-failed')
 
 
-
 def email_verification_sent(request):
-
     return render(request, 'account/registration/email-verification-sent.html')
 
 
 def email_verification_success(request):
-
     return render(request, 'account/registration/email-verification-success.html')
 
 
-
 def email_verification_failed(request):
-
     return render(request, 'account/registration/email-verification-failed.html')
 
 
 
 def my_login(request):
-
-    form = LoginForm()
+    if request.user.is_authenticated:
+        return redirect('store')
 
     if request.method == 'POST':
-
-        form = LoginForm(request, data=request.POST)
-
-        if form.is_valid():
-
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-
-                auth.login(request, user)
-
-                return redirect("dashboard")
-
-
-    context = {'form':form}
-
-    return render(request, 'account/my-login.html', context=context)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Try to authenticate the user
+        user = auth.authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            auth.login(request, user)
+            
+            # Check if there's a next parameter in the URL
+            next_url = request.GET.get('next', 'store')
+            return redirect(next_url)
+        else:
+            messages.error(request, 'Invalid username or password')
+            return redirect('my-login')
+            
+    return render(request, 'account/my-login.html')
 
 
 # logout
@@ -230,6 +207,38 @@ def delete_account(request):
 
     return render(request, 'account/delete-account.html')
 
+def mock_register(request):
+    # Only allow mock registration in local development
+    if not settings.DEBUG:
+        return redirect('register')
+    
+    # Generate unique username to avoid conflicts
+    unique_id = str(uuid.uuid4())[:8]
+    username = f'test_user_{unique_id}'
+    email = f'{username}@example.com'
+    password = 'mockuser123'
+    
+    # Create mock user
+    user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+        first_name='Test',
+        last_name='User'
+    )
+    user.save()
+    
+    # Set mock user flag in profile
+    profile = user.userprofile
+    profile.is_mock_user = True
+    profile.save()
+    
+    # Log the user in
+    login(request, user)
+    
+    # Get the next URL from the query parameters
+    next_url = request.GET.get('next', 'store')
+    return redirect(next_url)
 
 # Shipping view
 @login_required(login_url='my-login')
@@ -296,17 +305,3 @@ def track_orders(request):
     except:
 
         return render(request, 'account/track-orders.html')
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
