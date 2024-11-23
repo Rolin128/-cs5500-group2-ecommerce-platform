@@ -121,16 +121,17 @@
 
             success: function(json){
 
-                //console.log(json)
-
                 document.getElementById("cart-qty").textContent = json.qty
-
+                
+                // Show bulk purchase message if quantity exceeded
+                if (json.exceeded) {
+                    alert("To prevent malicious bulk purchases, please contact us at mungb.pro@gmail.com for assistance with bulk orders.");
+                }
 
             },
 
             error: function(xhr, errmsg, err){
-
-
+                console.log(err);
             }
 
         });

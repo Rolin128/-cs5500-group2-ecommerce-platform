@@ -1,4 +1,3 @@
-
 from decimal import Decimal
 
 from store.models import Product
@@ -12,26 +11,34 @@ class Cart():
         if 'session_key' not in request.session:
             cart = self.session['session_key'] = {}
         self.cart = cart
+
     def add(self, product, product_qty):
         product_id = str(product.id)
         if product_id in self.cart:
-            self.cart[product_id]['qty'] = product_qty
+            # Add the new quantity to the existing quantity, capped at 99
+            new_qty = min(self.cart[product_id]['qty'] + product_qty, 99)
+            self.cart[product_id]['qty'] = new_qty
         else:
-            self.cart[product_id] = {'price': str(product.price), 'qty': product_qty}
+            # Cap the initial quantity at 99
+            self.cart[product_id] = {'price': str(product.price), 'qty': min(product_qty, 99)}
         self.session.modified = True
+
     def delete(self, product):
         product_id = str(product)
         if product_id in self.cart:
             del self.cart[product_id]
         self.session.modified = True
+
     def update(self, product, qty):
         product_id = str(product)
         product_quantity = qty
         if product_id in self.cart:
             self.cart[product_id]['qty'] = product_quantity
         self.session.modified = True
+
     def __len__(self):
         return sum(item['qty'] for item in self.cart.values())
+
     def __iter__(self):
         all_product_ids = self.cart.keys()
         products = Product.objects.filter(id__in=all_product_ids)
@@ -42,12 +49,6 @@ class Cart():
             item['price'] = Decimal(item['price'])
             item['total'] = item['price'] * item['qty']
             yield item       
+
     def get_total(self):
         return sum(Decimal(item['price']) * item['qty'] for item in self.cart.values())
-
-
-
-
-  
-
-

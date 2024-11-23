@@ -16,10 +16,24 @@ def cart_add(request):
         product_id = int(request.POST.get('product_id'))
         product_quantity = int(request.POST.get('product_quantity'))
         product = get_object_or_404(Product, id=product_id)
+        
+        # Check if adding this quantity would exceed 99
+        current_qty = 0
+        if str(product_id) in cart.cart:
+            current_qty = cart.cart[str(product_id)]['qty']
+        
+        # Calculate total quantity after addition
+        total_qty = current_qty + product_quantity
+        
+        # Add to cart
         cart.add(product=product, product_qty=product_quantity)
         cart_quantity = cart.__len__()
-        response = JsonResponse({'qty': cart_quantity})
-
+        
+        # Return exceeded flag if total would exceed 99
+        response = JsonResponse({
+            'qty': cart_quantity,
+            'exceeded': total_qty > 99
+        })
         return response
 
 def cart_delete(request):
@@ -44,4 +58,3 @@ def cart_update(request):
         cart_total = cart.get_total()
         response = JsonResponse({'qty':cart_quantity, 'total':cart_total})
         return response
-
