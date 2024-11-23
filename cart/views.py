@@ -53,6 +53,13 @@ def cart_update(request):
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('product_id'))
         product_quantity = int(request.POST.get('product_quantity'))
+        
+        # Validate quantity doesn't exceed 99
+        if product_quantity > 99:
+            product_quantity = 99
+        elif product_quantity < 1:
+            product_quantity = 1
+            
         cart.update(product=product_id, qty=product_quantity)
         cart_quantity = cart.__len__()
         cart_total = cart.get_total()

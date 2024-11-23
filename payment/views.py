@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 # Create your views here.
 
@@ -6,11 +7,18 @@ from . models import ShippingAddress, Order, OrderItem
 
 from cart.cart import Cart
 
-
 from django.http import JsonResponse
 
 
 def checkout(request):
+
+    # Get cart
+    cart = Cart(request)
+    
+    # Check if cart is empty or total is 0
+    if not cart.get_total():
+        messages.error(request, "Your cart is empty. Please add items before checking out.")
+        return redirect('cart-summary')
 
     # Users with accounts -- Pre-fill the form
 
@@ -127,6 +135,7 @@ def complete_order(request):
 
 
 
+
         order_success = True
 
         response = JsonResponse({'success':order_success})
@@ -136,7 +145,7 @@ def complete_order(request):
 
 
 
-
+    
 
     
 
@@ -161,6 +170,7 @@ def payment_success(request):
 
 
 
+    
 
 
 
@@ -168,12 +178,3 @@ def payment_success(request):
 def payment_failed(request):
 
     return render(request, 'payment/payment-failed.html')
-
-
-
-
-
-
-
-
-
