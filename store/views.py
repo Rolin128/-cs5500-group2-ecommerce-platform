@@ -52,18 +52,39 @@ def categories(request):
 
 
 def list_category(request, category_slug=None):
-
     category = get_object_or_404(Category, slug=category_slug)
-
     products = Product.objects.filter(category=category)
-
-
-    return render(request, 'store/list-category.html', {'category':category, 'products':products})
+    
+    context = {
+        'category': category,
+        'products': products,
+    }
+    
+    # Add personalized content for logged-in users
+    if request.user.is_authenticated:
+        # Get recently viewed products
+        recent_product_ids = request.session.get('recent_products', [])
+        recent_items = Product.objects.filter(id__in=recent_product_ids)[:4]
+        
+        # Get recommended products from the current category
+        recommended_items = Product.objects.filter(
+            category=category
+        ).exclude(
+            id__in=recent_product_ids
+        ).order_by('?')[:4]  # Random selection
+        
+        context.update({
+            'recent_items': recent_items,
+            'recommended_items': recommended_items
+        })
+    
+    return render(request, 'store/list-category.html', context)
 
 
 
 def product_info(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
+    context = {'product': product}
 
     # Track recently viewed products for logged-in users
     if request.user.is_authenticated:
@@ -84,5 +105,16 @@ def product_info(request, product_slug):
         request.session['recent_products'] = recent_products
         request.session.modified = True
 
-    context = {'product': product}
+        # Get recommended products from the same category
+        recommended_items = Product.objects.filter(
+            category=product.category
+        ).exclude(
+            id=product.id
+        ).order_by('?')[:4]  # Random selection
+        
+        context.update({
+            'recent_items': Product.objects.filter(id__in=recent_products)[:4],
+            'recommended_items': recommended_items
+        })
+
     return render(request, 'store/product-info.html', context)

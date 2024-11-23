@@ -1,10 +1,7 @@
-{% include "store/base.html" %}
-
+{% extends "store/base.html" %}
 
 {% load static %}
-
 {% load mathfilters %}
-
 
 {% block content %}
 
@@ -14,95 +11,93 @@
       
       <h1 class="h5"> Shopping cart </h1>
 
-	    <hr>
-
-      <!-- LP
+      <hr>
       
       {% for item in cart %}
-
-      {% with product=item.product %}
-
-
-      <br>
-
-      <div class="row mb-4 border product-item">
-        
-        <div class="col-md-3 col-lg-2 order-md-first bg-light">
-        
-            <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{product.image.url}}"> <!-- Product image -->
-        
-        </div>
-
-        
-        <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
-          
-          <a href="{{product.get_absolute_url}}" class="text-info text-decoration-none"> <!-- Product get absolute url -->
-          
-            <h1 class="h5 pt-2"> {{product.title}}<!-- Product title --> </h1>
-          
-          </a>
-          
-          <div class="border">
-            
-            <div class="col border-bottom">
-              
-                <div class="row p-3">
-              
-                <div class="col-6"> Product </div>
-              
-                <div class="col-6 text-end"><span class="h6 fw-bold">$ {{product.price|mul:item.qty}} </span></div>
-            
-              </div>
-            
+        {% with product=item.product %}
+          <br>
+          <div class="row mb-4 border product-item">
+            <div class="col-md-3 col-lg-2 order-md-first bg-light product-image-container">
+                {% if item.image_missing %}
+                    <img class="img-fluid mx-auto d-block product-image" 
+                         width="200px" 
+                         alt="Product image not available" 
+                         src="{% static 'images/no-image.png' %}"
+                         loading="lazy">
+                {% else %}
+                    <img class="img-fluid mx-auto d-block product-image" 
+                         width="200px" 
+                         alt="{{ product.title }}" 
+                         src="{{ product.image.url }}"
+                         onerror="this.onerror=null; this.src='{% static 'images/no-image.png' %}'"
+                         loading="lazy">
+                {% endif %}
             </div>
+
             
-            <div class="col">
+            <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
               
-              <div class="row p-3">
+              <a href="{{product.get_absolute_url}}" class="text-info text-decoration-none"> <!-- Product get absolute url -->
+              
+                <h1 class="h5 pt-2"> {{product.title}}<!-- Product title --> </h1>
+              
+              </a>
+              
+              <div class="border">
                 
-                <div class="col-12">
+                <div class="col border-bottom">
                   
-                  <label for="select">Qty</label>
-                  &nbsp; 
-                  <input type="number" id="select{{product.id}}" class="form-control d-inline-block" 
-                         style="width: 80px;" min="1" max="99" value="{{item.qty}}"
-                         oninput="this.value = this.value > 99 ? 99 : Math.abs(this.value)">
+                    <div class="row p-3">
                   
-                  <br> <br>
+                    <div class="col-6"> Product </div>
+                  
+                    <div class="col-6 text-end"><span class="h6 fw-bold">$ {{product.price|mul:item.qty}} </span></div>
+                
+                  </div>
+                
+                </div>
+                
+                <div class="col">
+                  
+                  <div class="row p-3">
+                    
+                    <div class="col-12">
+                      
+                      <label for="select">Qty</label>
+                      &nbsp; 
+                      <input type="number" id="select{{product.id}}" class="form-control d-inline-block" 
+                             style="width: 80px;" min="1" max="99" value="{{item.qty}}"
+                             oninput="this.value = this.value > 99 ? 99 : Math.abs(this.value)">
+                      
+                      <br> <br>
 
-                  <button type="button" data-index="{{product.id}}"
-                    class="btn btn-primary btn-sm update-button">
-                    Update
-                  </button>
-                  
-                  &nbsp;
+                      <button type="button" data-index="{{product.id}}"
+                        class="btn btn-primary btn-sm update-button">
+                        Update
+                      </button>
+                      
+                      &nbsp;
 
-                  <button type="button" data-index="{{product.id}}"
-                    class="btn btn-danger btn-sm delete-button">
-                    Delete
+                      <button type="button" data-index="{{product.id}}"
+                        class="btn btn-danger btn-sm delete-button">
+                        Delete
         
-                  </button>
+                      </button>
         
 
+                    </div>
+        
                 </div>
         
-            </div>
+                </div>
+        
+              </div>
         
             </div>
-    
-            </div>
-    
-        </div>
       
-    </div>
-    
-    {% endwith %}
-    
-    {% endfor %}
-
-
-    <!-- LP -->
-
+        </div>
+        {% endwith %}
+      {% endfor %}
 
       <div class="col-12 text-end">
  

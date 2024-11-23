@@ -1,15 +1,26 @@
 from django.shortcuts import render
-
 from .cart import Cart
-from store.models import Product
-
+from store.models import Product, Category
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
 
 def cart_summary(request):
     cart = Cart(request)
-    return render(request, 'cart/cart-summary.html', {'cart':cart})
+    categories = Category.objects.all()
+    
+    # Validate product images exist
+    for item in cart:
+        product = item['product']
+        if not product.image or not hasattr(product.image, 'url'):
+            # Set a flag to indicate missing image
+            item['image_missing'] = True
+    
+    return render(request, 'cart/cart-summary.html', {
+        'cart': cart,
+        'categories': categories,
+    })
+
 def cart_add(request):
     cart = Cart(request)
     if request.POST.get('action') == 'post':
