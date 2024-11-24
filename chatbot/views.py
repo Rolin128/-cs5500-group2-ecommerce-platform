@@ -1,5 +1,5 @@
 import openai
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
 import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -42,23 +42,38 @@ def chatbot_recommendations(request):
         except json.JSONDecodeError:
             logger.error("OpenAI response is not valid JSON.")
             return JsonResponse({"response": "Error parsing OpenAI response."}, status=500)
-        except Exception as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error: {e}")
             return JsonResponse({"response": "Error processing user intent with OpenAI."}, status=500)
+        except Exception as e:
+            logger.error(f"Unexpected error: {e}")
+            return JsonResponse({"response": "An unexpected error occurred."}, status=500)
 
         # Extract user preferences
         category = semantic_data.get("category")
         brand = semantic_data.get("brand")
-        min_price = semantic_data.get("min_price")
-        max_price = semantic_data.get("max_price")
+        
+        # Handle price range
+        price_range = semantic_data.get("price_range")
+        min_price = None
+        max_price = None
+        
+        if isinstance(price_range, dict):
+            min_price = price_range.get("min") or price_range.get("min_price")
+            max_price = price_range.get("max") or price_range.get("max_price")
+        elif isinstance(price_range, str) and "under" in price_range.lower():
+            try:
+                max_price = float(''.join(filter(str.isdigit, price_range)))
+            except ValueError:
+                pass
 
         logger.info(f"Extracted details - Category: {category}, Brand: {brand}, Min Price: {min_price}, Max Price: {max_price}")
 
         # Build query filters
         filters = {}
-        if category:
-            filters["title__icontains"] = category
-        if brand:
+        if category and category.lower() not in ['all', 'any']:
+            filters["category__name__icontains"] = category
+        if brand and brand.lower() not in ['all', 'any']:
             filters["brand__icontains"] = brand
         if min_price is not None:
             filters["price__gte"] = min_price
