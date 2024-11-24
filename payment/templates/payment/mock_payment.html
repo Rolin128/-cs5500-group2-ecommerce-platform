@@ -1,0 +1,79 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Mock Payment (Testing Only)</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'mock-payment-process' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Card Number</label>
+                            <input type="text" class="form-control" id="cardNumber" name="cardNumber" 
+                                   placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="expiryDate" class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control" id="expiryDate" name="expiryDate" 
+                                       placeholder="MM/YY" maxlength="5" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" name="cvv" 
+                                       placeholder="123" maxlength="3" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardHolder" class="form-label">Card Holder Name</label>
+                            <input type="text" class="form-control" id="cardHolder" name="cardHolder" 
+                                   placeholder="John Doe" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Complete Payment</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    <small>This is a mock payment page for testing purposes only. Any card details will be accepted.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Format card number with spaces
+    document.getElementById('cardNumber').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\s/g, '');
+        let formattedValue = value.replace(/(\d{4})/g, '$1 ').trim();
+        e.target.value = formattedValue;
+    });
+
+    // Format expiry date with slash
+    document.getElementById('expiryDate').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\//g, '');
+        if (value.length >= 2) {
+            value = value.slice(0,2) + '/' + value.slice(2);
+        }
+        e.target.value = value;
+    });
+
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+});
+</script>
+{% endblock %}

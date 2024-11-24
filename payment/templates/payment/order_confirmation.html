@@ -1,0 +1,91 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Order Confirmed!
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="display-1 text-success mb-3">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <h2>Thank you for your order!</h2>
+                        <p class="lead text-muted">Order #{{ order.id }}</p>
+                    </div>
+
+                    <div class="order-details">
+                        <h5 class="border-bottom pb-2">Order Details</h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-4">
+                                <strong>Order Date:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ order.created|date:"F j, Y" }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4">
+                                <strong>Payment Method:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ order.payment_option }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4">
+                                <strong>Total Amount:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                ${{ order.total_paid }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4">
+                                <strong>Status:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-success">{{ order.status }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-items mt-4">
+                        <h5 class="border-bottom pb-2">Order Items</h5>
+                        {% for item in order.items.all %}
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                {{ item.product.title }}
+                            </div>
+                            <div class="col-sm-2 text-end">
+                                {{ item.quantity }}x
+                            </div>
+                            <div class="col-sm-4 text-end">
+                                ${{ item.price }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'store' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                            View My Orders<i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

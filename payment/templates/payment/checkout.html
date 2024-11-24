@@ -119,6 +119,12 @@
 
 
                 <div id="paypal-button-container"></div>
+                <!-- Mock Payment Button (Testing Only) -->
+                <div class="mt-3">
+                    <a href="{% url 'mock-payment' %}" class="btn btn-secondary w-100">
+                        <i class="fa fa-credit-card"></i> Mock Payment (Testing Only)
+                    </a>
+                </div>
 
 
                 <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>

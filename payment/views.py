@@ -152,29 +152,86 @@ def complete_order(request):
 
 
 
+def mock_payment(request):
+    """
+    Display the mock payment form for testing purposes.
+    """
+    # Get cart
+    cart = Cart(request)
+    
+    # Check if cart is empty or total is 0
+    if not cart.get_total():
+        messages.error(request, "Your cart is empty. Please add items before checking out.")
+        return redirect('cart-summary')
+        
+    return render(request, 'payment/mock_payment.html')
+
+def mock_payment_process(request):
+    """
+    Process the mock payment and create the order.
+    """
+    if request.method != 'POST':
+        return redirect('checkout')
+
+    # Get cart
+    cart = Cart(request)
+    
+    if not cart.get_total():
+        messages.error(request, "Your cart is empty. Please add items before checking out.")
+        return redirect('cart-summary')
+
+    # Create order
+    if request.user.is_authenticated:
+        order = Order.objects.create(
+            full_name=request.user.get_full_name(),
+            email=request.user.email,
+            shipping_address="Test Address",  # You might want to get this from the session
+            amount_paid=cart.get_total(),
+            user=request.user,
+            status="Placed"  # Set the order status to "Placed"
+        )
+
+        for item in cart:
+            OrderItem.objects.create(
+                order_id=order.pk,
+                product=item['product'],
+                quantity=item['qty'],
+                price=item['price'],
+                user=request.user
+            )
+    else:
+        order = Order.objects.create(
+            full_name="Test User",  # You might want to get this from the session
+            email="test@example.com",  # You might want to get this from the session
+            shipping_address="Test Address",  # You might want to get this from the session
+            amount_paid=cart.get_total(),
+            status="Placed"  # Set the order status to "Placed"
+        )
+
+        for item in cart:
+            OrderItem.objects.create(
+                order_id=order.pk,
+                product=item['product'],
+                quantity=item['qty'],
+                price=item['price']
+            )
+
+    # Clear the cart by removing the session key
+    if 'session_key' in request.session:
+        del request.session['session_key']
+        request.session.modified = True
+
+    # Redirect to success page
+    return redirect('payment-success')
+
+
 def payment_success(request):
-
-
     # Clear shopping cart
-
-
     for key in list(request.session.keys()):
-
         if key == 'session_key':
-
             del request.session[key]
-
-
-
     return render(request, 'payment/payment-success.html')
 
 
-
-    
-
-
-
-
 def payment_failed(request):
-
     return render(request, 'payment/payment-failed.html')

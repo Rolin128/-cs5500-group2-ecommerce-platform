@@ -47,20 +47,24 @@ class ShippingAddress(models.Model):
 
 class Order(models.Model):
 
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Placed', 'Placed'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+    ]
+
     full_name = models.CharField(max_length=300)
 
     email = models.EmailField(max_length=255)
 
     shipping_address = models.TextField(max_length=10000)
 
-
     amount_paid = models.DecimalField(max_digits=8, decimal_places=2)
-
-
-
 
     date_ordered = models.DateTimeField(auto_now_add=True)
 
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
 
     # FK
 

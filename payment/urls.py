@@ -15,12 +15,8 @@ urlpatterns = [
 
     path('payment-failed', views.payment_failed, name='payment-failed'),
 
+    path('mock-payment', views.mock_payment, name='mock-payment'),
+
+    path('mock-payment-process', views.mock_payment_process, name='mock-payment-process'),
+
 ]
-
-
-
-
-
-
-
-
