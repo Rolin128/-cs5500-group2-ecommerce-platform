@@ -8,6 +8,7 @@ from cart.cart import Cart
 import json
 import os
 from unittest.mock import patch, MagicMock
+import openai
 
 class StoreViewTests(TestCase):
     def setUp(self):
@@ -184,8 +185,8 @@ class ChatbotViewTests(TestCase):
             description='Test Description'
         )
 
-    @patch('openai.OpenAI')
-    def test_chatbot_recommendations(self, mock_openai):
+    @patch('chatbot.views.client')
+    def test_chatbot_recommendations(self, mock_client):
         """Test chatbot recommendations"""
         # Mock OpenAI response
         mock_completion = MagicMock()
@@ -194,7 +195,7 @@ class ChatbotViewTests(TestCase):
                 content='{"category": "Test Category", "brand": "Test Brand", "min_price": 0, "max_price": 100}'
             ))
         ]
-        mock_openai.return_value.chat.completions.create.return_value = mock_completion
+        mock_client.chat.completions.create.return_value = mock_completion
 
         response = self.client.post('/chatbot/recommendations/', 
             json.dumps({'query': 'Show me products in Test Category'}),
@@ -209,10 +210,10 @@ class ChatbotViewTests(TestCase):
         self.assertEqual(recommendations[0]['title'], 'Test Product')
         self.assertEqual(recommendations[0]['brand'], 'Test Brand')
 
-    @patch('openai.OpenAI')
-    def test_openai_error_handling(self, mock_openai):
+    @patch('chatbot.views.client')
+    def test_openai_error_handling(self, mock_client):
         """Test OpenAI API error handling"""
-        mock_openai.return_value.chat.completions.create.side_effect = Exception("OpenAI API Error")
+        mock_client.chat.completions.create.side_effect = openai.OpenAIError("OpenAI API Error")
 
         response = self.client.post('/chatbot/recommendations/', 
             json.dumps({'query': 'Show me products'}),

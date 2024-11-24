@@ -94,17 +94,17 @@ class ChatbotRecommendationTests(TestCase):
         recommendations = data['response']
         self.assertTrue(any(p['brand'] == 'Samsung' for p in recommendations))
 
-    @patch('openai.OpenAI')
-    def test_product_recommendation_by_price_range(self, mock_openai):
+    @patch('chatbot.views.client')
+    def test_product_recommendation_by_price_range(self, mock_client):
         """Test product recommendations by price range"""
-        # Mock OpenAI response
+        # Mock OpenAI response for price range query
         mock_completion = MagicMock()
         mock_completion.choices = [
             MagicMock(message=MagicMock(
-                content='{"price_range": "under $100", "min_price": 0, "max_price": 100}'
+                content='{"category": "any", "price_range": "under $100"}'
             ))
         ]
-        mock_openai.return_value.chat.completions.create.return_value = mock_completion
+        mock_client.chat.completions.create.return_value = mock_completion
 
         response = self.client.post('/chatbot/recommendations/', 
             json.dumps({'query': 'Show me products under $100'}),

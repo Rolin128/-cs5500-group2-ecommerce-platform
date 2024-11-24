@@ -181,3 +181,90 @@ python manage.py test tests.backend_tests.backend_tests
    - Test authentication requirements
    - Validate user permissions
    - Check input sanitization
+
+## Backend Tests Documentation
+
+### Overview
+The backend test suite (`backend_tests.py`) contains comprehensive tests for core backend functionality including store operations, cart management, payment processing, and chatbot features.
+
+### Test Categories
+
+#### 1. Store View Tests (`StoreViewTests`)
+Tests the basic store functionality and views:
+- Store homepage view (authenticated and unauthenticated)
+- Category listing functionality
+- Product detail views
+- Template rendering
+- Context data validation
+
+#### 2. Cart View Tests (`CartViewTests`)
+Validates shopping cart operations:
+- Adding items to cart
+- Removing items from cart
+- Quantity updates
+- Cart total calculations
+- Session management
+
+#### 3. Payment View Tests (`PaymentViewTests`)
+Tests the checkout process:
+- Empty cart handling
+- Checkout with items
+- Order creation
+- Shipping address validation
+
+#### 4. Chatbot View Tests (`ChatbotViewTests`)
+Tests the AI-powered chatbot functionality:
+- Product recommendations
+- OpenAI API integration
+- Error handling
+- Invalid request handling
+
+### Test Coverage
+
+#### Store Views
+- Homepage rendering 
+- Category filtering 
+- Product details 
+- Authentication states 
+- Context data 
+
+#### Cart Operations
+- Add to cart 
+- Remove from cart 
+- Update quantities 
+- Cart calculations 
+- Session persistence 
+
+#### Payment Processing
+- Checkout flow 
+- Order creation 
+- Empty cart handling 
+- Address validation 
+
+#### Chatbot Features
+- AI recommendations 
+- Error handling 
+- Request validation 
+- OpenAI integration 
+
+### Setup Requirements
+- Django TestCase framework
+- Mock objects for OpenAI API
+- Test database configuration
+- Sample product and user data
+
+### Common Issues and Solutions
+1. **OpenAI API Mocking**
+   - Use `unittest.mock` for API calls
+   - Handle potential API errors
+   - Mock response formats
+
+2. **Database State**
+   - Clean up after tests
+   - Use `setUp` and `tearDown`
+   - Isolate test data
+
+3. **Authentication**
+   - Test both authenticated and anonymous users
+   - Verify session handling
+   - Check permission levels

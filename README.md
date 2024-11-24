@@ -1,40 +1,7 @@
 # Simple E-Commerce Website (First Iteration)
 
-This is the initial version of a basic e-commerce site, designed to showcase essential online shopping functionality. This project serves as a foundational step in developing a full-featured e-commerce platform.
+## Part 1: Installation and Setup
 
-## Project Structure (First Iteration)
-
-### 1. Home Page
-   - **Purpose**: Creates a strong first impression by displaying key products and providing intuitive navigation.
-   - **Key Elements**:
-     - Featured product display with images and names.
-     - Navigation bar with links to the Product Listing and Shopping Cart pages.
-     - Footer with basic site information (optional).
-
-### 2. Product Listing Page
-   - **Purpose**: Allows users to browse all available products.
-   - **Key Elements**:
-     - Displays products in a list or grid format with images, names, and prices.
-     - Each product includes an **Add to Cart** button.
-
-### 3. Shopping Cart Page
-   - **Purpose**: Summarizes items added to the cart, showing total costs.
-   - **Key Elements**:
-     - Lists selected items with names and prices.
-     - Displays the total price.
-     - Simple **Checkout** button (no full checkout process).
-
-### 4. Login/Signup Page (Optional)
-   - **Purpose**: Enables user account creation and login. Can be skipped for a basic setup.
-   - **Key Elements**:
-     - **Login** and **Signup** forms.
-
-### 5. Chatbot
-   - **Purpose**: Provides customer support and guidance on the homepage.
-   - **Key Elements**:
-     - A small chatbot popup, integrated using a basic chatbot framework.
-
-## Installation and Setup
 ### 1. Clone the Repository
 If you haven't already cloned the repository, run:
 
@@ -97,9 +64,65 @@ This will start the server at http://127.0.0.1:8000/. Open this URL in your brow
 ```bash
 python manage.py runserver
 ```
+
 ### 6. Access Admin Panel Visit
 http://127.0.0.1:8000/admin and log in with the superuser credentials to access Django’s admin interface.
 
+## Part 2: Running Tests
 
+Our project includes a comprehensive test suite covering frontend, backend, database, and integration tests.
 
+### Running Specific Test Categories
+```bash
+# Run backend tests
+python manage.py test tests.backend_tests.backend_tests
 
+# Run frontend tests
+python manage.py test tests.frontend_tests.frontend_tests
+
+# Run chatbot tests
+python manage.py test tests.chatbot_tests.chatbot_tests
+
+# Run database tests
+python manage.py test tests.database_tests.database_tests
+
+# Run integration tests
+python manage.py test tests.integration_tests.integration_tests
+
+# Run end-to-end tests
+python manage.py test tests.e2e_tests.e2e_tests
+```
+
+For more detailed information about our test suite, please refer to `tests/tests_readme.md`.
+
+## Part 3: Project Overview
+
+### 1. Home Page
+   - **Purpose**: Creates a strong first impression by displaying key products and providing intuitive navigation.
+   - **Key Elements**:
+     - Featured product display with images and names.
+     - Navigation bar with links to the Product Listing and Shopping Cart pages.
+     - Footer with basic site information (optional).
+
+### 2. Product Listing Page
+   - **Purpose**: Allows users to browse all available products.
+   - **Key Elements**:
+     - Displays products in a list or grid format with images, names, and prices.
+     - Each product includes an **Add to Cart** button.
+
+### 3. Shopping Cart Page
+   - **Purpose**: Summarizes items added to the cart, showing total costs.
+   - **Key Elements**:
+     - Lists selected items with names and prices.
+     - Displays the total price.
+     - Simple **Checkout** button (no full checkout process).
+
+### 4. Login/Signup Page (Optional)
+   - **Purpose**: Enables user account creation and login. Can be skipped for a basic setup.
+   - **Key Elements**:
+     - **Login** and **Signup** forms.
+
+### 5. Chatbot
+   - **Purpose**: Provides customer support and guidance on the homepage.
+   - **Key Elements**:
+     - A small chatbot popup, integrated using a basic chatbot framework.
