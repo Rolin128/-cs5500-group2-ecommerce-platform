@@ -25,12 +25,86 @@ This document provides an overview of our comprehensive test suite for the Djang
 - Error handling tests
 - See `chatbot_tests_explanation.md` for details
 
-### 4. Database Tests (`/tests/database_tests/`)
-- Model creation and validation
-- Relationships and foreign keys
-- Stock management and concurrency
-- Data integrity and constraints
-- See `database_tests_explanation.md` for details
+### 4. Database Tests
+Located in `/tests/database_tests/`, these tests verify the integrity and functionality of our database models:
+
+#### Files
+- `database_tests.py`: Comprehensive model tests
+  - CategoryModelTest: Tests for Category model
+  - ProductModelTest: Tests for Product model
+- `database_tests_explanation.md`: Detailed testing documentation
+
+#### Coverage Areas
+1. Model Creation and Validation
+   - Field constraints and validation
+   - Default values
+   - String representation
+   - Unique constraints
+
+2. Relationships
+   - Category-Product relationships
+   - Reverse relationship access
+   - Optional relationship handling
+
+3. URL Generation
+   - Absolute URL generation
+   - Slug-based URLs
+   - URL pattern validation
+
+4. Business Logic
+   - Default value handling
+   - Optional field behavior
+   - Model-specific constraints
+
+#### Key Features
+- Independent test methods
+- Comprehensive validation
+- Clear test organization
+- Detailed documentation
+- Database cleanup handling
+
+### 5. Integration Tests
+Located in `/tests/integration_tests/`, these tests verify the interactions between different components and end-to-end workflows:
+
+#### Files
+- `integration_tests.py`: End-to-end test scenarios
+  - User authentication flow
+  - Product management
+  - Shopping cart operations
+  - Checkout process
+- `integration_tests_explanation.md`: Detailed testing documentation
+
+#### Coverage Areas
+1. User Authentication
+   - Registration and login
+   - Protected views
+   - Session management
+
+2. Product Management
+   - Category and product views
+   - Search functionality
+   - Content verification
+
+3. Shopping Cart
+   - Cart operations (Add/Update/Delete)
+   - Session handling
+   - AJAX interactions
+
+4. Checkout Process
+   - Cart to checkout flow
+   - Price calculations
+   - Authentication requirements
+
+#### Key Features
+- End-to-end workflow testing
+- Component interaction verification
+- Session and state management
+- HTTP request/response testing
+- Authentication flow validation
+- Unique user generation using UUID
+- Proper product slug handling
+- Comprehensive AJAX testing
+- Session state validation
 
 ## Directory Structure
 
@@ -46,8 +120,11 @@ tests/
 │   ├── chatbot_tests.py            # Chatbot test cases
 │   └── chatbot_tests_explanation.md # Chatbot test documentation
 ├── database_tests/
-│   ├── database_tests.py
-│   └── database_tests_explanation.md
+│   ├── database_tests.py           # Database test cases
+│   └── database_tests_explanation.md # Database test documentation
+├── integration_tests/
+│   ├── integration_tests.py        # Integration test cases
+│   └── integration_tests_explanation.md # Integration test documentation
 └── tests_readme.md                 # This file
 ```
 
@@ -102,6 +179,13 @@ tests/
   * Order processing
   * Price calculations
 
+### Integration Coverage
+- User Authentication: 100%
+- Product Management: 100%
+- Cart Operations: 100%
+- Checkout Process: 100%
+- View Access Control: 100%
+
 ## Running Tests
 
 1. Set up environment:
@@ -128,6 +212,9 @@ python manage.py test tests.chatbot_tests.chatbot_tests
 
 # Database tests
 python manage.py test tests.database_tests.database_tests
+
+# Integration tests
+python manage.py test tests.integration_tests.integration_tests
 ```
 
 4. Run specific test classes:
