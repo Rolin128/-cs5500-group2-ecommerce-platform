@@ -1,0 +1,61 @@
+/* Override primary color except for checkout */
+.bg-primary:not(.checkout-related),
+.navbar.bg-primary {
+    background-color: #FF7F7F !important;
+}
+
+.btn-primary:not(.checkout-related):not([href*="checkout"]) {
+    background-color: #FF7F7F !important;
+    border-color: #FF7F7F !important;
+    color: white !important;
+}
+
+.btn-primary:not(.checkout-related):not([href*="checkout"]):hover {
+    background-color: #FF6666 !important;
+    border-color: #FF6666 !important;
+    color: white !important;
+}
+
+.btn-outline-primary:not(.checkout-related):not([href*="checkout"]) {
+    color: #FF7F7F !important;
+    border-color: #FF7F7F !important;
+}
+
+.btn-outline-primary:not(.checkout-related):not([href*="checkout"]):hover {
+    background-color: #FF7F7F !important;
+    color: white !important;
+}
+
+.text-primary:not(.checkout-related) {
+    color: #FF7F7F !important;
+}
+
+a:not([href*="checkout"]):not(.checkout-related) {
+    color: #FF7F7F;
+}
+
+a:not([href*="checkout"]):not(.checkout-related):hover {
+    color: #FF6666;
+}
+
+.badge.bg-primary:not(.checkout-related) {
+    background-color: #FF7F7F !important;
+}
+
+/* Keep focus states visible but themed */
+.btn-primary:focus:not(.checkout-related):not([href*="checkout"]),
+.btn-primary:active:not(.checkout-related):not([href*="checkout"]) {
+    box-shadow: 0 0 0 0.25rem rgba(255, 127, 127, 0.5) !important;
+}
+
+/* Cart button styling */
+.btn-light .bi-cart3 {
+    margin-right: 4px;
+}
+
+.btn-light {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
