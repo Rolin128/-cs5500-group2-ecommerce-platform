@@ -1,0 +1,168 @@
+:root {
+    --primary: #CD5C5C;          /* Indian Red - lighter main color */
+    --secondary: #E6796E;        /* Light coral - softer secondary */
+    --accent: #FF6B6B;          /* Soft red - accent color */
+    --primary-fg: #fff;
+    --body-fg: #333;
+    --body-bg: #fff;
+    --body-quiet-color: #666;
+    --body-loud-color: #000;
+    --header-color: #ffc;
+    --header-branding-color: var(--accent);
+    --header-bg: var(--primary);
+    --header-link-color: var(--primary-fg);
+    --breadcrumbs-fg: #fff;
+    --breadcrumbs-link-fg: var(--body-bg);
+    --breadcrumbs-bg: #E6796E;
+    --link-fg: #CD5C5C;         /* Indian Red for links */
+    --link-hover-color: #FF6B6B;
+    --link-selected-fg: #B22222;
+    --button-fg: #fff;
+    --button-bg: #CD5C5C;       /* Indian Red for buttons */
+    --button-hover-bg: #E6796E;
+    --default-button-bg: #CD5C5C;
+    --default-button-hover-bg: #B22222;
+    --close-button-bg: #CD5C5C;
+    --close-button-hover-bg: #B22222;
+    --delete-button-bg: #dc3545;
+    --delete-button-hover-bg: #c82333;
+    --object-tools-fg: var(--button-fg);
+    --object-tools-bg: #E6796E;
+    --object-tools-hover-bg: #CD5C5C;
+}
+
+/* Header */
+#header {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: var(--header-link-color);
+    border-bottom: 1px solid #ddd;
+}
+
+#header a:link, #header a:visited {
+    color: var(--header-link-color);
+}
+
+/* Module headers */
+.module h2, .module caption {
+    background: #f8f9fa;
+    color: var(--primary);
+    font-weight: bold;
+    border-bottom: 2px solid var(--primary);
+}
+
+/* Buttons */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--button-bg);
+    color: var(--button-fg);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: var(--button-hover-bg);
+}
+
+.button.default, input[type=submit].default {
+    background: var(--default-button-bg);
+}
+
+.button.default:hover, input[type=submit].default:hover {
+    background: var(--default-button-hover-bg);
+}
+
+/* Links */
+a:link, a:visited {
+    color: var(--link-fg);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Selected rows */
+.row1:hover, .row2:hover {
+    background: #fff5f5;
+}
+
+/* Form controls */
+.select2-container--admin-autocomplete .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--primary);
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+    background: var(--breadcrumbs-bg);
+    color: var(--breadcrumbs-fg);
+    padding: 15px 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+div.breadcrumbs a {
+    color: var(--breadcrumbs-link-fg);
+}
+
+/* Messages */
+.messagelist li.success {
+    background: #f8fff8;
+    border-color: var(--primary);
+}
+
+/* Dashboard */
+.dashboard .module table th {
+    background: #f8f9fa;
+    color: var(--primary);
+    font-weight: bold;
+    border-bottom: 2px solid var(--primary);
+}
+
+.dashboard .module table td a:hover {
+    color: var(--link-hover-color);
+}
+
+/* App index */
+.app-store .module h2, 
+.app-auth .module h2,
+.app-cart .module h2,
+.app-account .module h2,
+.app-payment .module h2 {
+    background: #f8f9fa;
+    color: var(--primary);
+    padding: 12px 15px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 2px solid var(--primary);
+}
+
+/* Recent actions module */
+.module ul.actionlist {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.module ul.actionlist li {
+    padding: 8px 15px;
+    border-bottom: 1px solid #eee;
+    list-style-type: none;
+}
+
+.module ul.actionlist li:last-child {
+    border-bottom: none;
+}
+
+/* Custom styling for the login form */
+.login #header {
+    height: auto;
+    padding: 15px 40px;
+}
+
+.login #content {
+    padding: 20px 40px;
+}
+
+.login .form-row {
+    padding: 4px 0;
+    float: left;
+    width: 100%;
+    border-bottom: none;
+}

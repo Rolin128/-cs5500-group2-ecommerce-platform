@@ -86,8 +86,47 @@ This will start the server at http://127.0.0.1:8000/. Open this URL in your brow
 python manage.py runserver
 ```
 
-### 7. Access Admin Panel Visit
-http://127.0.0.1:8000/admin and log in with the superuser credentials to access Django’s admin interface.
+### 7. Access Admin Panel
+Visit http://127.0.0.1:8000/admin and log in with the superuser credentials to access Django's admin interface.
+
+The admin panel provides comprehensive management capabilities:
+
+#### Product Management
+- Add, edit, or remove products
+- Manage product categories
+- Update product images and descriptions
+- Control inventory and pricing
+
+#### Order Management
+- View and process customer orders
+- Track order status and history
+- Manage shipping information
+- Handle refunds and returns
+
+#### User Management
+- Manage customer accounts
+- View customer order history
+- Handle user permissions
+- Monitor user activity
+
+#### Content Management
+- Update homepage banners
+- Manage promotional content
+- Edit site-wide announcements
+- Control featured products
+
+To add a new product:
+1. Click on "Products" in the admin panel
+2. Click "Add Product" in the top right
+3. Fill in the required fields:
+   - Title
+   - Brand
+   - Description
+   - Price
+   - Image
+4. Click "Save" to publish the product
+
+> **Tip**: Keep product images consistent in size (recommended: 800x800 pixels) for the best visual presentation.
 
 ## Part 2: Testing Guide
 
