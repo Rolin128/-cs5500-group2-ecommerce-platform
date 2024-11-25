@@ -50,75 +50,88 @@
                         <div class="row p-3">
               
                             <div class="col-6">
-              
-                               
-                                <label for="select">Qty</label>
-                                
-                                &nbsp; 
-                               
-                                <select id="select">
-              
-                                    <option value="1">1</option>
-              
-                                    <option value="2">2</option>
-              
-                                    <option value="3">3</option>
-              
-                                    <option value="4">4</option>
-              
-                                </select>
-
+                                <label for="quantity">Qty</label>
+                                &nbsp;
+                                <input 
+                                    type="number" 
+                                    id="quantity" 
+                                    name="quantity" 
+                                    value="1" 
+                                    min="1" 
+                                    max="99" 
+                                    class="form-control form-control-sm d-inline-block" 
+                                    style="width: 70px;"
+                                >
                             </div>
 
                             <div class="col-6 text-end">
-                                
                                 <button type="button" id="add-button" value="{{product.id}}" class="btn btn-secondary btn-sm">
-                        
                                     <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add to cart 
-                            
-                                </button> 
-                            
-
+                                </button>
                             </div>
-                        
                         </div>
 
                     </div>
 
                 </div>
 
+                <!-- Messages container -->
+                <div id="cart-message" class="mt-3" style="display: none;">
+                </div>
+
             </div>
-
         </div>
-
     </main>
-
     <br>
-
 </div>
 
-
 <script>
-
-    // Add button
+    // Validate quantity input
+    $('#quantity').on('input', function() {
+        let value = parseInt(this.value);
+        if (isNaN(value) || value < 1) {
+            this.value = 1;
+        } else if (value > 99) {
+            this.value = 99;
+        }
+    });
 
     $(document).on('click', '#add-button', function(e){
-
         e.preventDefault();
 
-        $.ajax({
+        const quantity = parseInt($('#quantity').val());
+        const messageContainer = $('#cart-message');
+        
+        // Validate quantity before sending request
+        if (isNaN(quantity) || quantity < 1) {
+            messageContainer.html(`
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> Please enter a valid quantity (minimum 1).
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `).show();
+            return;
+        }
+        
+        if (quantity > 99) {
+            messageContainer.html(`
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> Maximum quantity allowed is 99 items.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `).show();
+            return;
+        }
 
+        $.ajax({
             type: 'POST',
             url: '{% url "cart-add" %}',
             data: {
-
                 product_id: $('#add-button').val(),
-                product_quantity: $('#select option:selected').text(),
+                product_quantity: quantity,
                 csrfmiddlewaretoken: "{{csrf_token}}",
                 action: 'post'
-
             },
-
             success: function(json){
                 // Update cart quantity
                 const cartQty = document.getElementById("cart-qty");
@@ -126,26 +139,44 @@
                     cartQty.textContent = json.qty;
                 }
                 
-                // Show bulk purchase message if quantity exceeded
+                // Show appropriate message based on response
                 if (json.exceeded) {
-                    alert("To prevent malicious bulk purchases, please contact us at mungb.pro@gmail.com for assistance with bulk orders.");
+                    messageContainer.html(`
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> To prevent malicious bulk purchases, please contact us at mungb.pro@gmail.com for assistance with bulk orders.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `).show();
+                } else {
+                    messageContainer.html(`
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle"></i> Successfully added ${quantity} item(s) to your cart!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `).show();
                 }
-            },
 
+                // Auto-hide message after 5 seconds
+                setTimeout(() => {
+                    messageContainer.fadeOut();
+                }, 5000);
+            },
             error: function(xhr, errmsg, err){
                 console.log(err);
+                messageContainer.html(`
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i> An error occurred while adding to cart. Please try again.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `).show();
             }
-
         });
+    });
 
-
-    })
-
-
-
-
+    // Clear message when quantity changes
+    $('#quantity').on('change', function() {
+        $('#cart-message').hide();
+    });
 </script>
-
-
 
 {% endblock %}
