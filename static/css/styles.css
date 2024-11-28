@@ -1,3 +1,55 @@
+/* main slide figure */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.main_slider {
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the left */
+    padding-left: 5%; /* Add some padding to the left for spacing */
+}
+
+.fill_height {
+    height: 100%;
+}
+
+.main_slider_content {
+    text-align: left;
+    padding: 0 15px; 
+}
+
+.main_slider_content h1 {
+    font-size: 60px; 
+}
+.main_slider_content .thanksgiving {
+    color: rgb(201, 11, 11); 
+}
+
+.container {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.slide-row {
+    margin: 0;
+    width: 100%;
+}
+
+.slide-col {
+    padding: 0;
+}
+
+
+/* finish */
+
 .form-layout{
     border-radius: 20px;
     width: 500px;
