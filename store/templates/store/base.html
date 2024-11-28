@@ -24,6 +24,7 @@
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Custom JavaScript for image handling -->
     <script>
@@ -39,6 +40,55 @@
                 });
                 img.classList.add('loading');
             });
+        });
+    </script>
+     <script>
+        function initTimer() {
+            if ($('.timer').length) {
+                // Uncomment line below and replace date
+                // var target_date = new Date("Dec 7, 2017").getTime();
+
+                // comment lines below
+                var date = new Date();
+                date.setDate(date.getDate() + 16);
+                var target_date = date.getTime();
+                //----------------------------------------
+
+                // variables for time units
+                var days, hours, minutes, seconds;
+
+                var d = $('#day');
+                var h = $('#hour');
+                var m = $('#minute');
+                var s = $('#second');
+
+                setInterval(function () {
+                    // find the amount of "seconds" between now and target
+                    var current_date = new Date().getTime();
+                    var seconds_left = (target_date - current_date) / 1000;
+
+                    // do some time calculations
+                    days = parseInt(seconds_left / 86400);
+                    seconds_left = seconds_left % 86400;
+
+                    hours = parseInt(seconds_left / 3600);
+                    seconds_left = seconds_left % 3600;
+
+                    minutes = parseInt(seconds_left / 60);
+                    seconds = parseInt(seconds_left % 60);
+
+                    // display result
+                    d.text(days);
+                    h.text(hours);
+                    m.text(minutes);
+                    s.text(seconds);
+
+                }, 1000);
+            }
+        }
+
+        $(document).ready(function() {
+            initTimer();
         });
     </script>
 </head>
