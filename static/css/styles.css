@@ -98,7 +98,9 @@ html, body {
 .banner_container {
     width: 100%;
     padding-left: 9%;
+    padding-right: 9%;
     margin: 0;
+    box-sizing: border-box;
 }
 
 .benifit_container{
@@ -558,6 +560,63 @@ h3::after {
     width: 100px;
     height: 4px;
     background-color: #09a332;
+}
+
+.evtitle {
+    font-size: 2em; /* 或者使用 18.72px */
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.evtitle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 150px;
+    height: 4px;
+    background-color: #09a332;
+}
+
+.eititle {
+    font-size: 2em; /* 或者使用 18.72px */
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.eititle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 200px;
+    height: 4px;
+    background-color: #123acb;
+}
+
+.fptitle {
+    font-size: 2em; /* 或者使用 18.72px */
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.fptitle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 170px;
+    height: 4px;
+    background-color: rgb(185, 37, 37);
 }
 
 /* Responsive Adjustments */

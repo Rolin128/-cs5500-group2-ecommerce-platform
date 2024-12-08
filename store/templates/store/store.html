@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     {% if user.is_authenticated %}
 
 
@@ -22,7 +22,7 @@
     </div>
     <div class="mb-4">
         <div class="main_slider"
-            style="background-image:url(../../../static/media/images/slider_1.jpg); height: 700px;  width: 99vw;">
+            style="background-image:url(../../../static/media/images/slider_1.jpg); height: 700px;  width: 100%;">
             <div class="container fill_height" style="height: 100%;">
                 <div class="row align-items-center fill_height">
                     <div class="col">
@@ -68,22 +68,19 @@
     </div>
 
 
-    {% if recent_items %}
+
 
     <div class="row">
         <div class="col-12">
-            <div class="new_arrivals">
-                <div class="container">
-                    <div class="row">
-                        <div class="col text-center">
-                            <div class="section_title new_arrivals_title mt-5">
-                                <h3>Recently Viewed</h3>
-                            </div>
-                        </div>
+            <div class="banner_container">
+                <div class="row">
+                    <div class="col text-center">
+                        <div class="section_title mt-5 evtitle">Recently Viewed</div>
                     </div>
                 </div>
             </div>
             <br />
+            {% if recent_items %}
 
 
             <div class="row banner_container">
@@ -106,29 +103,26 @@
     </div>
     {% endif %}
 
-    {% if recommended_items %}
+
     <div class="row">
         <div class="col-12">
-            <div class="new_arrivals">
-                <div class="container">
-                    <div class="row">
-                        <div class="col text-center">
-                            <div class="section_title new_arrivals_title mt-5">
-                                <h3>Recommended Items</h3>
-                            </div>
-                        </div>
+            <div class="banner_container">
+                <div class="row">
+                    <div class="col text-center">
+                        <div class="section_title eititle mt-5">Recommended Items</div>
                     </div>
                 </div>
             </div>
             <br />
+            {% if recommended_items %}
 
-            <div  class="row banner_container">
+            <div class="row banner_container">
                 {% for product in recommended_items %}
                 <div class="col-md-3 mb-4">
                     <!-- Product card for recommended items -->
                     <div class="card h-100">
                         <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}"
-                        style="height: 400px; object-fit: cover;">
+                            style="height: 400px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">{{ product.title }}</h5>
                             <p class="card-text" style="color: green;">${{ product.price }}</p>
@@ -158,35 +152,45 @@
     <!-- Featured Products Section -->
     <div class="row">
         <div class="col-12">
-            <div class="new_arrivals">
-                <div class="container">
-                    <div class="row">
-                        <div class="col text-center">
-                            <div class="section_title new_arrivals_title mt-5">
-                                <h3>Featured Products</h3>
-                            </div>
-                        </div>
+            <div class="banner_container">
+                <div class="row">
+                    <div class="col text-center">
+                        <div class="section_title fptitle mt-5">Featured Products</div>
                     </div>
                 </div>
             </div>
             <br />
-            <div class="row banner_container">
+            <div id="product-container">
                 {% for product in products %}
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}"
-                            style="height: 300px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.title }}</h5>
-                            <p class="card-text">${{ product.price }}</p>
-                            <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="row banner_container {% if forloop.counter0 >= 12 %}hidden-row{% endif %}">
+                    {% endif %}
+                    <div class="col-md-3 mb-4">
+                        <div class="card h-100">
+                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}"
+                                style="height: 300px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.title }}</h5>
+                                <p class="card-text">${{ product.price }}</p>
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                            </div>
                         </div>
                     </div>
+                    {% if forloop.counter|divisibleby:4 or forloop.last %}
                 </div>
+                {% endif %}
                 {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <button id="load-more" class="btn btn-loading">Load More...</button>
             </div>
         </div>
     </div>
+    <style>
+        .hidden-row {
+            display: none;
+        }
+    </style>
 </div>
 
 <div class="deal_ofthe_week  mt-5">
@@ -278,7 +282,7 @@
         <div class="row">
             <div class="col text-center">
                 <div class="section_title">
-                    <h2>Latest Blogs</h2>
+                    <h2>Best Sellers' Show</h2>
                 </div>
             </div>
         </div>
@@ -330,8 +334,8 @@
             <div class="col-lg-6">
                 <div
                     class="newsletter_text d-flex flex-column justify-content-center align-items-lg-start align-items-md-center text-center">
-                    <h4>Newsletter</h4>
-                    <p>Subscribe to our newsletter and get 20% off your first purchase</p>
+                    <h4>Want to join us?</h4>
+                    <p>Fill out your email and receive our reply within three days!</p>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -341,7 +345,7 @@
                         <input id="newsletter_email" type="email" placeholder="Your email" required="required"
                             data-error="Valid email is required.">
                         <button id="newsletter_submit" type="submit" class="newsletter_submit_btn trans_300"
-                            value="Submit">subscribe</button>
+                            value="Submit">Join In Now</button>
                     </div>
                 </form>
             </div>
@@ -368,6 +372,25 @@
     });
 
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loadMoreBtn = document.getElementById('load-more');
+        const rows = document.querySelectorAll('#product-container > .row');
+        let visibleRows = 3;
+
+        loadMoreBtn.addEventListener('click', function () {
+            if (visibleRows < rows.length) {
+                rows[visibleRows].style.display = 'flex';
+                visibleRows++;
+
+                if (visibleRows >= rows.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+        });
+    });
 </script>
 
 

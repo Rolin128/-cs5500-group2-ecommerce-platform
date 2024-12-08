@@ -1,45 +1,60 @@
 /* Override primary color except for checkout */
+.navbar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.btn-loading {
+    background-color: #FFFFFF!important;
+    border-color: #FFFFFF!important;
+    color: rgb(185, 37, 37) !important;
+}
+
+.bg-fgcart {
+    background-color: rgb(185, 37, 37);
+}
+
 .bg-primary:not(.checkout-related),
 .navbar.bg-primary {
-    background-color: #FF7F7F !important;
+    background-color: rgb(185, 37, 37) !important;
 }
 
 .btn-primary:not(.checkout-related):not([href*="checkout"]) {
-    background-color: #FF7F7F !important;
-    border-color: #FF7F7F !important;
+    background-color: rgb(185, 37, 37) !important;
+    border-color: rgb(185, 37, 37) !important;
     color: white !important;
 }
 
 .btn-primary:not(.checkout-related):not([href*="checkout"]):hover {
-    background-color: #FF6666 !important;
-    border-color: #FF6666 !important;
+    background-color: rgb(185, 37, 37) !important;
+    border-color: rgb(185, 37, 37) !important;
     color: white !important;
 }
 
 .btn-outline-primary:not(.checkout-related):not([href*="checkout"]) {
-    color: #FF7F7F !important;
-    border-color: #FF7F7F !important;
+    color: #d53030 !important;
+    border-color: #d53030 !important;
 }
 
 .btn-outline-primary:not(.checkout-related):not([href*="checkout"]):hover {
-    background-color: #FF7F7F !important;
+    background-color: #d53030 !important;
     color: white !important;
 }
 
 .text-primary:not(.checkout-related) {
-    color: #FF7F7F !important;
+    color: #d53030 !important;
 }
 
 a:not([href*="checkout"]):not(.checkout-related) {
-    color: #FF7F7F;
+    color: #d53030;
 }
 
 a:not([href*="checkout"]):not(.checkout-related):hover {
-    color: #FF6666;
+    color: rgb(185, 37, 37);
 }
 
 .badge.bg-primary:not(.checkout-related) {
-    background-color: #FF7F7F !important;
+    background-color: #d53030 !important;
 }
 
 /* Keep focus states visible but themed */

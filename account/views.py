@@ -31,8 +31,6 @@ from django.contrib import messages
 
 
 
-
-
 def register(request):
     if request.user.is_authenticated:
         return redirect('store')
