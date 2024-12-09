@@ -313,8 +313,8 @@
         }
 
         function toggleChatbot() {
-            const chatbotContainer = document.getElementById("chatbot-container");
-            chatbotContainer.style.display = chatbotContainer.style.display === "none" ? "block" : "none";
+            const chatbotContainer = document.querySelector(".chatbot-container");
+            chatbotContainer.classList.toggle("open");
         }
 
         function handleKeyPress(event) {

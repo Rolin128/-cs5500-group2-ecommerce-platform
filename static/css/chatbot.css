@@ -17,7 +17,6 @@ body .chatbot-container {
     height: 500px;
     min-height: 500px;
     max-height: 80vh;
-    display: none;
     background: #fff;
     border: 1px solid var(--deep-red);
     box-shadow: 0px 4px 6px rgba(139, 0, 0, 0.2);
@@ -28,11 +27,18 @@ body .chatbot-container {
     transition: width 0.3s ease, height 0.3s ease;
     display: flex;
     flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
 }
 
 body .chatbot-container.expanded {
     width: 50vw;
     height: 80vh;
+}
+
+body .chatbot-container.open {
+    visibility: visible; /* 显示容器 */
+    opacity: 1; /* 取消透明 */
 }
 
 body .chatbot-header {

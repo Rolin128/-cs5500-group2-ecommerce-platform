@@ -2,7 +2,7 @@ from django.db import models
 
 
 from django.urls import reverse
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
 
@@ -62,3 +62,15 @@ class Product(models.Model):
     def get_absolute_url(self):
 
         return reverse('product-info', args=[self.slug])
+
+class UserBrowsingHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # 关联到用户
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)  # 关联到商品
+    browsing_time = models.DateTimeField(auto_now_add=True)  # 自动记录浏览时间
+
+    class Meta:
+        verbose_name_plural = ' Browsing Histories'
+        ordering = ['-browsing_time']  # 默认按时间倒序排列
+
+    def __str__(self):
+        return f"{self.user.username} viewed {self.product.title}"

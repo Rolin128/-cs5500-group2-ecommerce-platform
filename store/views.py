@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from . models import Category, Product
+from . models import Category, Product, UserBrowsingHistory
 
 from django.shortcuts import get_object_or_404
 
@@ -91,18 +91,21 @@ def product_info(request, product_slug):
 
     # Track recently viewed products for logged-in users
     if request.user.is_authenticated:
-        # Get existing list from session
-        recent_products = request.session.get('recent_products', [])
+        # 检查是否已存在该浏览记录，避免重复存储
+        existing_history = UserBrowsingHistory.objects.filter(user=request.user, product=product)
+        if not existing_history.exists():
+            UserBrowsingHistory.objects.create(user=request.user, product=product)
+
+        # 保留最近 4 条记录
+        recent_history = UserBrowsingHistory.objects.filter(user=request.user).order_by('-browsing_time')
+        if recent_history.count() > 4:
+            # 删除超出的记录（从第 5 条开始删除）
+            UserBrowsingHistory.objects.filter(
+                pk__in=[record.pk for record in recent_history[4:]]
+            ).delete()
         
-        # Remove the product if it's already in the list
-        if product.id in recent_products:
-            recent_products.remove(product.id)
-            
-        # Add the product to the beginning of the list
-        recent_products.insert(0, product.id)
-        
-        # Keep only the last 10 viewed products
-        recent_products = recent_products[:10]
+        # Keep only the last 4 viewed products
+        recent_products = [history.product.id for history in recent_history[:4]]
         
         # Update session
         request.session['recent_products'] = recent_products
