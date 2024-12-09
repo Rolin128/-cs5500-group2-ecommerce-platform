@@ -84,7 +84,10 @@ def list_category(request, category_slug=None):
 
 def product_info(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
-    context = {'product': product}
+    default_description = "No description with this item"
+    context = {'product': product,
+               'description': product.description if product.description else default_description,
+               }
 
     # Track recently viewed products for logged-in users
     if request.user.is_authenticated:
@@ -116,5 +119,10 @@ def product_info(request, product_slug):
             'recent_items': Product.objects.filter(id__in=recent_products)[:4],
             'recommended_items': recommended_items
         })
+        
+
 
     return render(request, 'store/product-info.html', context)
+
+
+

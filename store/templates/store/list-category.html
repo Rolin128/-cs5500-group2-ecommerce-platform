@@ -8,40 +8,88 @@
 
 <main>
 
-    <div class="container">
+  <div class="container-fluid">
+    <div class="mb-1">
+      <div class="main_slider" style="background-image:url(../../../static/media/images/k1.jpg); height: 80px">
+      </div>
+    </div>
 
-      <div class="pb-3 h5"> {{category.name | capfirst }} </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="banner_container">
+          <div class="row">
+            <div class="col text-center">
+              <div class="section_title mt-5 fptitle">{{category.name | capfirst }} </div>
+            </div>
+          </div>
+        </div>
+        <br />
 
+        <div class="row banner_container mt-5" id="product-container">
+          {% comment %}
+          每4个商品作为一行
+          {% endcomment %}
 
-      <hr>
+          {% for product in products %}
+          {% if forloop.counter0|divisibleby:4 %}
+          <div class="row product-row">
+            {% endif %}
 
-      <br>
-
-
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
-
-      
-        {% for product in products %}
-
-        <div class="col-md-3 mb-4">
-          <!-- Product card for recent items -->
-          <div class="card h-100">
-              <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}" style="height: 400px; object-fit: cover;">
-              <div class="card-body">
+            <div class="col-md-3 mb-4">
+              <!-- Product card -->
+              <div class="card h-100">
+                <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}"
+                  style="height: 400px; object-fit: cover;">
+                <div class="card-body">
                   <h5 class="card-title">{{ product.title }}</h5>
                   <p class="card-text">${{ product.price }}</p>
                   <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                </div>
               </div>
-          </div>
-      </div>
+            </div>
 
-        {% endfor %}
+            {% if forloop.counter|divisibleby:4 or forloop.last %}
+          </div> <!-- row end -->
+          {% endif %}
+          {% endfor %}
+        </div>
 
+        <div class="text-center mt-2 mb-4">
+          <button id="load-more" class="btn btn-loading">Load More...</button>
+        </div>
       </div>
     </div>
+
   </div>
 
 
+
 </main>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loadMoreBtn = document.getElementById('load-more');
+    const rows = document.querySelectorAll('#product-container > .product-row');
+    let visibleRows = 2; // 初始显示2行
+
+    // 初始化时只显示前两行
+    rows.forEach((row, index) => {
+      if (index < visibleRows) {
+        row.style.display = 'flex';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    loadMoreBtn.addEventListener('click', function () {
+      if (visibleRows < rows.length) {
+        rows[visibleRows].style.display = 'flex';
+        visibleRows++;
+        if (visibleRows >= rows.length) {
+          loadMoreBtn.style.display = 'none';
+        }
+      }
+    });
+  });
+</script>
 
 {% endblock %}

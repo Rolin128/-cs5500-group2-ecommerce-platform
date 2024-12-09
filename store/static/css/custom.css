@@ -4,6 +4,16 @@
     padding-bottom: 20px;
 }
 
+.icon-left {
+    color: #f53939;
+    font-size: 3rem;
+}
+
+.icon-right {
+    color: #f31515;
+    font-size: 1.8rem;
+}
+
 .btn-loading {
     background-color: #FFFFFF!important;
     border-color: #FFFFFF!important;
