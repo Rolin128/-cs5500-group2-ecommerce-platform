@@ -1,22 +1,14 @@
 from django.shortcuts import redirect, render
-
 from .forms import CreateUserForm, LoginForm, UpdateUserForm
-
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
-
 from payment.models import Order, OrderItem
-
-
 from django.contrib.auth.models import User
-
 from django.contrib.sites.shortcuts import get_current_site
 from . token import user_tokenizer_generate
-
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login
 from django.conf import settings
@@ -32,32 +24,31 @@ from django.contrib import messages
 
 
 def register(request):
-    if request.user.is_authenticated:
-        return redirect('store')
-
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user.email = user.email.lower()
+            user = form.save(commit=False)
+            user.is_active = False  # 设置为未激活
             user.save()
 
-            # Log the user in
-            auth.login(request, user)
+            # 生成验证邮件
+            current_site = get_current_site(request)
+            subject = 'Account Verification Email'
+            message = render_to_string('account/registration/email-verification.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': user_tokenizer_generate.make_token(user),
+            })
 
-            # Get the next URL from the form data
-            next_url = request.POST.get('next', 'store')
-            return redirect(next_url)
+            user.email_user(subject=subject, message=message)
+            messages.success(request, 'Your account was created! Please verify your email.')
+            return redirect('email-verification-sent')
+
     else:
         form = CreateUserForm()
+    return render(request, 'account/registration/register.html', {'form': form})
 
-    context = {
-        'form': form,
-        'debug': settings.DEBUG,
-        'next': request.GET.get('next', '')
-    }
-
-    return render(request, 'account/registration/register.html', context=context)
 
 
 

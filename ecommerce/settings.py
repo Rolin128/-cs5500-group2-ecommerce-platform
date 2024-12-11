@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'crispy_forms', # Crispy forms
 
     'storages',
-
+    
+    'django_extensions',
 
 ]
 
@@ -176,8 +177,8 @@ EMAIL_USE_TLS = 'True'
 
 # Be sure to read the guide in the resources folder of this lecture (SETUP THE EMAIL BACKEND)
 
-EMAIL_HOST_USER = '' # - Enter your GMAIL address # The host email that sends password reset emails
-EMAIL_HOST_PASSWORD = '' # - Enter your app password 
+EMAIL_HOST_USER = 'lihancai012@gmail.com' # - Enter your GMAIL address # The host email that sends password reset emails
+EMAIL_HOST_PASSWORD = 'nsyp spfz hhln qicd' # - Enter your app password 
 
 
 # AWS credentials:
